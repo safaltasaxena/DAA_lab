@@ -18,17 +18,43 @@ $gcc lab2q2.c -o lab2q2
 $./lab2q2 inGcd.dat outGcd.dat
 Output: Display the gcd stored in the output file outGcd.dat
 */
-void fnc(int a, int b) {
-    if (b == 0) {
-        printf("The GCD is %d\n", a);
-        return;
-    }
-    fnc(b, a % b);
+
+int gcd(int a,int b)
+{
+    if(b==0)
+        return a;
+
+    return gcd(b,a%b);
 }
-int main () {
-    int a, b;
-    printf("Enter two numbers: ");
-    scanf("%d %d", &a, &b);
-    fnc(a, b);
+
+int main(int argc,char *argv[])
+{
+    if(argc!=3)
+    {
+        printf("Usage: ./lab2q2 input output");
+        return 0;
+    }
+
+    FILE *in=fopen(argv[1],"r");
+    FILE *out=fopen(argv[2],"w");
+
+    if(in==NULL||out==NULL)
+    {
+        printf("File Error");
+        return 0;
+    }
+
+    int a,b;
+
+    while(fscanf(in,"%d%d",&a,&b)==2)
+    {
+        fprintf(out,"The GCD of %d and %d is %d\n",a,b,gcd(a,b));
+    }
+
+    fclose(in);
+    fclose(out);
+
+    printf("Results stored successfully.\n");
+
     return 0;
 }

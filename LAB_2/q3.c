@@ -5,6 +5,7 @@
 
 /*
 insertion sort
+tc-o(N*N)
 */
 
 int main() {

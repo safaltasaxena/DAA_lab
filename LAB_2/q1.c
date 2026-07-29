@@ -19,27 +19,59 @@ Terminal Input:
 $gcc lab2q1.c -o lab2q1
 $./lab2q1 150 inDec.dat outBin.dat
 Output: Content of the first ‘n’ decimal and their equivalent binary numbers*/
-void fnc(int num){
-    if(num>0){
-        fnc(num/2);
-        printf("%d",num%2);
-    }
-}
-int  main(){
-    int n;
-    printf("Enter the value of n: ");
-    scanf("%d",&n);
-    int arr[n];
-    printf("Enter the elements of the array: ");
-    for(int i=0;i<n;i++){
-        scanf("%d",&arr[i]);
-    }
-    printf("The binary equivalent of the numbers are:\n");
-    for(int i=0;i<n;i++){
-        printf("The binary equivalent of %d is ",arr[i]);
-        fnc(arr[i]);
-        printf("\n");
-    }
-    return 0;
 
+void binary(int n)
+{
+    if(n>1)
+        binary(n/2);
+
+    printf("%d",n%2);
+}
+
+void binaryFile(FILE *fp,int n)
+{
+    if(n>1)
+        binaryFile(fp,n/2);
+
+    fprintf(fp,"%d",n%2);
+}
+
+int main(int argc,char *argv[])
+{
+    if(argc!=4)
+    {
+        printf("Usage: ./q1 n input output\n");
+        return 0;
+    }
+
+    int limit=atoi(argv[1]);
+
+    FILE *in=fopen(argv[2],"r");
+    FILE *out=fopen(argv[3],"w");
+
+    if(in==NULL||out==NULL)
+    {
+        printf("File Error");
+        return 0;
+    }
+
+    int x,count=0;
+
+    while(count<limit && fscanf(in,"%d",&x)==1)
+    {
+        fprintf(out,"Binary of %d = ",x);
+        binaryFile(out,x);
+        fprintf(out,"\n");
+
+        printf("%d -> ",x);
+        binary(x);
+        printf("\n");
+
+        count++;
+    }
+
+    fclose(in);
+    fclose(out);
+
+    return 0;
 }
